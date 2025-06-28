@@ -1,97 +1,144 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 📱 TaskManagementApp – React Native Firebase App
 
-# Getting Started
+A clean and functional **React Native** task manager built using **React Native CLI**, with **Firebase Authentication**, **Cloud Firestore**, and **AsyncStorage** to persist login sessions.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+## ✨ Features
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+- 🔐 **Login & Signup** with Firebase Authentication
+- 🎉 **Welcome Screen** on fresh launch
+- 📅 Create, Edit, Delete Tasks
+- 🚦 Prioritize tasks with `low`, `medium`, or `high` levels
+- ✅ Mark tasks as complete/incomplete
+- 🔍 Search tasks by title
+- 🔃 Swipe to delete tasks
+- ☁️ Store tasks in Firestore per user
+- 💾 Login persistence using AsyncStorage
+- 🎨 Styled with custom `fontSize` and `moderateScale` utilities
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+---
+
+## 🖼️ Screens Included
+
+- **Welcome.js** – Initial welcome screen
+- **Login.js** – Firebase sign-in
+- **Signup.js** – Firebase registration
+- **Main.js** – Task dashboard
+
+---
+
+## 🚀 Getting Started
+
+> Make sure your environment is set up:  
+> 📘 https://reactnative.dev/docs/environment-setup
+
+### 1️⃣ Clone & Install
 
 ```sh
-# Using npm
+git clone <your-repo-url>
+cd TaskManagementApp
+npm install
+# or
+yarn
+2️⃣ Firebase Setup
+No firebaseConfig.js is used.
+Firebase is integrated using:
+
+@react-native-firebase/app
+
+@react-native-firebase/auth
+
+@react-native-firebase/firestore
+
+✅ Make sure:
+
+google-services.json is placed in android/app/
+
+GoogleService-Info.plist is added in ios/
+
+🔧 Follow official setup: https://rnfirebase.io/
+
+📲 Run the App
+Start Metro Bundler
+sh
+Copy
+Edit
 npm start
-
-# OR using Yarn
+# or
 yarn start
-```
-
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
+Run on Android
+sh
+Copy
+Edit
 npm run android
-
-# OR using Yarn
+# or
 yarn android
-```
-
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
+Run on iOS
+sh
+Copy
+Edit
+cd ios
 bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
 bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
+cd ..
 npm run ios
-
-# OR using Yarn
+# or
 yarn ios
-```
+🗂️ Folder Structure
+css
+Copy
+Edit
+TaskManagementApp/
+├── App.tsx
+├── screens/
+│   ├── Welcome.js
+│   ├── Login.js
+│   ├── Signup.js
+│   └── Main.js
+├── utils/
+│   └── metrix.js
+├── ...
+🧪 Usage Tips
+➕ Press + FAB to add new task
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+✏️ Tap edit icon to modify
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+🗑️ Swipe left to delete
 
-## Step 3: Modify your app
+✅ Tap task to mark complete
 
-Now that you have successfully run the app, let's make changes!
+🔍 Use search to filter
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+🔌 Dependencies
+txt
+Copy
+Edit
+@react-native-firebase/app
+@react-native-firebase/auth
+@react-native-firebase/firestore
+@react-native-async-storage/async-storage
+react-native-vector-icons
+react-native-gesture-handler
+🧹 Troubleshooting
+sh
+Copy
+Edit
+# Reset Metro
+npx react-native start --reset-cache
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+# Clean Android build
+cd android && ./gradlew clean
+📚 Learn More
+React Native
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+Firebase Auth
 
-## Congratulations! :tada:
+Firestore
 
-You've successfully run and modified your React Native App. :partying_face:
+React Native Firebase
 
-### Now what?
+AsyncStorage
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+🧑‍💻 Built by Faijan
+📦 Project: TaskManagementApp
