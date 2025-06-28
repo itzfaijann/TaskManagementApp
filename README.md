@@ -36,7 +36,7 @@ A clean and functional **React Native** task manager built using **React Native 
 ### 1️⃣ Clone & Install
 
 ```sh
-git clone <your-repo-url>
+git clone <https://github.com/itzfaijann/TaskManagementApp>
 cd TaskManagementApp
 npm install
 # or
