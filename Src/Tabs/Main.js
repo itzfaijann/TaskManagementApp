@@ -26,38 +26,132 @@ const Tag = ({ text, color }) => (
     <Text style={styles.tagText}>{text}</Text>
   </View>
 );
-
 const TaskCard = ({ task, onToggle, onEdit, onDelete }) => {
   const renderRightActions = () => (
     <TouchableOpacity style={styles.deleteButton} onPress={() => onDelete(task.id)}>
       <Ionicons name="trash" size={20} color="#fff" />
     </TouchableOpacity>
   );
-
   return (
     <Swipeable renderRightActions={renderRightActions}>
-      <View
+      <TouchableOpacity
+        activeOpacity={0.85}
+        onLongPress={() => onToggle(task.id, !task.completed)}
         style={[
           styles.taskCard,
-          { borderLeftColor: priorities[task.priority], borderLeftWidth: moderateScale(5) },
+          { borderLeftColor: priorities[task.priority] },
           task.completed && { opacity: 0.5 },
         ]}
       >
-        <View style={styles.taskHeader}>
-          <Text style={[styles.taskTitle, task.completed && { textDecorationLine: 'line-through' }]}>{task.title}</Text>
-          <TouchableOpacity onPress={() => onEdit(task)}>
-            <Ionicons name="create-outline" size={moderateScale(18)} color="#8266FF" />
+        <View style={styles.taskTop}>
+          <TouchableOpacity
+            onPress={() => onToggle(task.id, !task.completed)}
+            style={[
+              styles.checkboxCircle,
+              task.completed && styles.checkboxCircleCompleted,
+            ]}
+          >
+            {task.completed ? (
+              <Ionicons name="checkmark" size={14} color="#fff" />
+            ) : null}
           </TouchableOpacity>
+
+          <View style={{ flex: 1, marginLeft: moderateScale(10) }}>
+            <View style={styles.taskHeader}>
+              <Text
+                style={[
+                  styles.taskTitle,
+                  task.completed && {
+                    textDecorationLine: 'line-through',
+                    color: '#aaa',
+                  },
+                ]}
+                numberOfLines={1}
+              >
+                {task.title}
+              </Text>
+
+              <TouchableOpacity onPress={() => onEdit(task)}>
+                <Ionicons
+                  name="create-outline"
+                  size={moderateScale(18)}
+                  color="#8266FF"
+                />
+              </TouchableOpacity>
+            </View>
+
+            {task.description ? (
+              <Text style={styles.taskDesc} numberOfLines={2}>
+                {task.description}
+              </Text>
+            ) : null}
+<TouchableOpacity
+  onPress={() => onToggle(task.id, !task.completed)}
+  style={styles.markTextWrapper}
+>
+  <Text
+    style={[
+      styles.markText,
+      task.priority === 'high' && styles.markTextHigh,
+      task.priority === 'medium' && styles.markTextMedium,
+      task.priority === 'low' && styles.markTextLow,
+    ]}
+  >
+    {task.completed ? 'Mark as Incomplete' : 'Mark as Completed'}
+  </Text>
+</TouchableOpacity>
+
+          </View>
         </View>
-        <Text style={styles.taskDate}>{task.dueDate}</Text>
-        <Text style={styles.taskDesc}>{task.description}</Text>
-        <View style={styles.tagsRow}>
-          <Tag text={task.priority} color={priorities[task.priority]} />
+
+        <View style={styles.taskFooter}>
+          <View style={styles.priorityDotWrapper}>
+            <View
+              style={[
+                styles.priorityDot,
+                { backgroundColor: priorities[task.priority] },
+              ]}
+            />
+            <Text style={styles.priorityText}>{task.priority}</Text>
+          </View>
+
+      <View
+  style={[
+    styles.dueDateBadge,
+    task.priority === 'high' && styles.dueDateBadgeHigh,
+    task.priority === 'medium' && styles.dueDateBadgeMedium,
+    task.priority === 'low' && styles.dueDateBadgeLow,
+  ]}
+>
+  <Ionicons
+    name="calendar-outline"
+    size={14}
+    color={
+      task.priority === 'high'
+        ? '#fff'
+        : task.priority === 'medium'
+        ? '#fff'
+        : '#fff'
+    }
+  />
+  <Text
+    style={[
+      styles.dueDateText,
+      task.priority === 'high' && styles.dueDateTextHigh,
+      task.priority === 'medium' && styles.dueDateTextMedium,
+      task.priority === 'low' && styles.dueDateTextLow,
+    ]}
+  >
+    {task.dueDate}
+  </Text>
+</View>
+
         </View>
-      </View>
+      </TouchableOpacity>
     </Swipeable>
   );
 };
+
 
 const Main = ({ navigation }) => {
   const [tasks, setTasks] = useState([]);
@@ -203,13 +297,18 @@ const Main = ({ navigation }) => {
 export default Main;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'white' },
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+
   headerWrapper: {
     backgroundColor: '#8266FF',
     paddingBottom: moderateScale(16),
     borderBottomLeftRadius: moderateScale(20),
     borderBottomRightRadius: moderateScale(20),
   },
+
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -217,10 +316,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: moderateScale(16),
     paddingTop: moderateScale(60),
   },
+
   circleTopRight: {
     position: 'absolute',
-    top: moderateScale(20),
-    right: -moderateScale(2),
+    top: moderateScale(46),
+    right: -moderateScale(1),
     width: moderateScale(60),
     height: moderateScale(60),
     borderRadius: moderateScale(50),
@@ -228,9 +328,10 @@ const styles = StyleSheet.create({
     opacity: 0.3,
     zIndex: 0,
   },
+
   circleBottomLeft: {
     position: 'absolute',
-    bottom: -moderateScale(70),
+    bottom: -moderateScale(64),
     left: -moderateScale(20),
     width: moderateScale(100),
     height: moderateScale(100),
@@ -239,20 +340,21 @@ const styles = StyleSheet.create({
     opacity: 0.3,
     zIndex: 0,
   },
-emailText: {
-  color: '#fff',
-  fontSize: fontSize(13), // increased for visibility
-  fontWeight: '500',
-  maxWidth: moderateScale(120),
-  overflow: 'hidden',
-},
 
+  emailText: {
+    color: '#fff',
+    fontSize: fontSize(13),
+    fontWeight: '500',
+    maxWidth: moderateScale(120),
+    overflow: 'hidden',
+  },
 
   headerTitle: {
     color: '#fff',
     fontSize: fontSize(18),
     fontWeight: 'bold',
   },
+
   searchInput: {
     backgroundColor: '#6d58e8',
     color: '#fff',
@@ -262,8 +364,11 @@ emailText: {
     paddingVertical: moderateScale(8),
     marginTop: moderateScale(10),
   },
-  scrollContainer: { padding: moderateScale(16) },
-  taskHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+
+  scrollContainer: {
+    padding: moderateScale(16),
+  },
+
   taskCard: {
     backgroundColor: '#fefefe',
     padding: moderateScale(16),
@@ -275,19 +380,151 @@ emailText: {
     shadowRadius: 6,
     elevation: 5,
     borderLeftWidth: moderateScale(5),
-    borderLeftColor: '#a18aff',
   },
-  taskTitle: { fontSize: fontSize(15), fontWeight: 'bold', color: '#2d2d2d' },
-  taskDate: { fontSize: fontSize(12), color: '#999', marginTop: moderateScale(6) },
-  taskDesc: { fontSize: fontSize(13), color: '#555', marginTop: moderateScale(6), lineHeight: moderateScale(18) },
-  tagsRow: { flexDirection: 'row', flexWrap: 'wrap', marginTop: moderateScale(12) },
+
+  taskTop: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: moderateScale(12),
+  },
+
+  checkboxCircle: {
+    width: moderateScale(20),
+    height: moderateScale(20),
+    borderRadius: moderateScale(10),
+    borderWidth: 1,
+    borderColor: '#ccc',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: moderateScale(2),
+  },
+
+  checkboxCircleCompleted: {
+    backgroundColor: '#8266FF',
+    borderColor: '#8266FF',
+  },
+
+  taskHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  taskTitle: {
+    fontSize: fontSize(15),
+    fontWeight: 'bold',
+    color: '#2d2d2d',
+  },
+  markTextWrapper: {
+  marginTop: moderateScale(6),
+},
+
+markText: {
+  fontSize: fontSize(12),
+  color: '#8266FF',
+  textDecorationLine: 'underline',
+  fontStyle: 'italic',
+},
+
+  taskDesc: {
+    fontSize: fontSize(13),
+    color: '#555',
+    marginTop: moderateScale(4),
+    lineHeight: moderateScale(18),
+  },
+
+  taskFooter: {
+    marginTop: moderateScale(12),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  priorityDotWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: moderateScale(6),
+  },
+
+  priorityDot: {
+    width: moderateScale(10),
+    height: moderateScale(10),
+    borderRadius: 5,
+  },
+
+  priorityText: {
+    fontSize: fontSize(12),
+    color: '#555',
+    textTransform: 'capitalize',
+  },
+
+  dueDateBadge: {
+    backgroundColor: '#e9e5ff',
+    borderRadius: moderateScale(10),
+    paddingHorizontal: moderateScale(8),
+    paddingVertical: moderateScale(4),
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: moderateScale(4),
+  },
+  // Due Date Styles
+dueDateBadgeHigh: {
+  backgroundColor: '#f85a5a',
+},
+dueDateBadgeMedium: {
+  backgroundColor: '#fcb045',
+},
+dueDateBadgeLow: {
+  backgroundColor: '#a18aff',
+},
+dueDateTextHigh: {
+  color: '#fff',
+  fontWeight: 'bold',
+},
+dueDateTextMedium: {
+  color: '#fff',
+  fontWeight: 'bold',
+},
+dueDateTextLow: {
+  color: '#fff',
+  fontWeight: 'bold',
+},
+
+// Mark Text Styles
+markTextHigh: {
+  color: '#f85a5a',
+},
+markTextMedium: {
+  color: '#fcb045',
+},
+markTextLow: {
+  color: '#a18aff',
+},
+
+
+  dueDateText: {
+    fontSize: fontSize(12),
+    color: '#8266FF',
+  },
+
+  tagsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: moderateScale(12),
+  },
+
   tag: {
     borderRadius: moderateScale(12),
     paddingHorizontal: moderateScale(8),
     paddingVertical: moderateScale(4),
     marginRight: moderateScale(6),
   },
-  tagText: { color: '#fff', fontSize: fontSize(12) },
+
+  tagText: {
+    color: '#fff',
+    fontSize: fontSize(12),
+  },
+
   fab: {
     position: 'absolute',
     bottom: moderateScale(24),
@@ -300,11 +537,13 @@ emailText: {
     alignItems: 'center',
     elevation: 5,
   },
+
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.4)',
   },
+
   modalContent: {
     margin: moderateScale(20),
     backgroundColor: '#fff',
@@ -312,18 +551,43 @@ emailText: {
     padding: moderateScale(16),
     elevation: 5,
   },
+
   modalTitle: {
     fontSize: fontSize(16),
     fontWeight: 'bold',
     marginBottom: moderateScale(10),
     textAlign: 'center',
   },
+
   input: {
     backgroundColor: '#f2f2f2',
     padding: moderateScale(10),
     borderRadius: moderateScale(10),
     marginBottom: moderateScale(10),
   },
+
+  saveBtn: {
+    backgroundColor: '#8266FF',
+    padding: moderateScale(12),
+    borderRadius: moderateScale(10),
+    alignItems: 'center',
+  },
+
+  saveBtnText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+
+  cancelBtn: {
+    marginTop: moderateScale(10),
+    alignItems: 'center',
+  },
+
+  cancelBtnText: {
+    color: '#8266FF',
+    fontWeight: 'bold',
+  },
+
   deleteButton: {
     backgroundColor: '#f85a5a',
     justifyContent: 'center',
@@ -333,33 +597,21 @@ emailText: {
     borderBottomRightRadius: moderateScale(16),
     marginBottom: moderateScale(12),
   },
-  saveBtn: {
-    backgroundColor: '#8266FF',
-    padding: moderateScale(12),
-    borderRadius: moderateScale(10),
-    alignItems: 'center',
-  },
-  saveBtnText: { color: '#fff', fontWeight: 'bold' },
-  cancelBtn: {
-    marginTop: moderateScale(10),
-    alignItems: 'center',
-  },
-  cancelBtnText: {
-    color: '#8266FF',
-    fontWeight: 'bold',
-  },
+
   emptyState: {
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: moderateScale(100),
     paddingHorizontal: moderateScale(20),
   },
+
   emptyText: {
     fontSize: fontSize(16),
     fontWeight: '600',
     color: '#999',
     marginTop: moderateScale(10),
   },
+
   emptySubText: {
     fontSize: fontSize(13),
     color: '#bbb',
